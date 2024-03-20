@@ -18,7 +18,7 @@ public class Main {
 
         for (int i = n; i >= 1; i--) {
             int tmp = answer;
-            comb(0, i);
+            comb(0, i, 0);
 
             if (tmp != answer) {
                 break;
@@ -28,8 +28,8 @@ public class Main {
         System.out.println(answer);
     }
 
-    private static void comb(int idx, int maxSize) {
-        if (idx == maxSize) {
+    private static void comb(int idx, int maxSize, int cnt) {
+        if (cnt == maxSize) {
             if (validate()) {
                 answer = maxSize;
                 System.out.println(answer);
@@ -40,7 +40,7 @@ public class Main {
 
         for (int i = idx; i<n; i++) {
             useLines.add(lines.get(i));
-            comb(i + 1, maxSize);
+            comb(i + 1, maxSize, cnt + 1);
             useLines.remove(useLines.size() - 1);
         }
     }
@@ -51,11 +51,11 @@ public class Main {
             Node node1 = useLines.get(i);
             for (int j = i + 1; j<useLines.size(); j++) {
                 Node node2 = useLines.get(j);
-                if (node1.x <= node2.x && node1.y >= node2.y) {
+                if (node1.x <= node2.x && node1.y >= node2.x) {
                     return false;
                 }
 
-                if (node2.x <= node1.x && node2.y >= node1.y) {
+                if (node2.x <= node1.x && node2.y >= node1.x) {
                     return false;
                 }
              }
