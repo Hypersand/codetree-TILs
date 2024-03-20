@@ -38,11 +38,9 @@ public class Main {
             return;
         }
 
-        for (int i = idx; i<n; i++) {
-            useLines.add(lines.get(i));
-            comb(i + 1, maxSize, cnt + 1);
-            useLines.remove(useLines.size() - 1);
-        }
+        useLines.add(lines.get(idx));
+        comb(idx + 1, maxSize, cnt + 1);
+        useLines.remove(useLines.size() - 1);
     }
 
     //선택한 선분이 겹치는지 검증한다.
