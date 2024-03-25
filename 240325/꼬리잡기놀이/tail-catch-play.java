@@ -8,6 +8,7 @@ public class Main {
     private static int score = 0;
     private static int[] dx = {-1, 1, 0, 0}; //상, 하
     private static int[] dy = {0, 0, -1, 1}; //좌, 우
+    private static boolean[][] visited;
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
@@ -53,6 +54,7 @@ public class Main {
     }
 
     private static void move() {
+        visited = new boolean[n][n];
         while(!queue.isEmpty()) {
             Node node = queue.poll();
             for (int i = 0; i<4; i++) {
@@ -63,27 +65,29 @@ public class Main {
                 //4라면 이동해야할 칸
                 //머리 이동
                 if (map[nx][ny] == 4) {
-                    map[nx][ny] = map[node.x][node.y];
+                    map[nx][ny] = 1;
                     map[node.x][node.y] = 4;
+                    //몸통, 꼬리 이동
+                    visited[nx][ny] = true;
+                    moveBodyAndTail(node.x, node.y);
                 }
-                //몸통, 꼬리 이동
-                moveBodyAndTail(node.x, node.y, nx, ny);
             }
         }
     }
 
-    //x, y : 이동할 위치   x2,y2 : 이동하면 안되는 위치
-    private static void moveBodyAndTail(int x, int y, int x2, int y2) {
+    //x, y : 이동할 위치
+    private static void moveBodyAndTail(int x, int y) {
         for (int i = 0; i<4; i++) {
             int nx = x + dx[i];
             int ny = y + dy[i];
             if (nx < 0 || ny < 0 || nx >= n || ny >=n) continue;
             if (map[nx][ny] == 0) continue;
-            if (nx == x2 && ny == y2) continue;
+            if (visited[nx][ny]) continue;
             if (map[nx][ny] == 2 || map[nx][ny] == 3) {
                 map[x][y] = map[nx][ny];
                 map[nx][ny] = 4;
-                moveBodyAndTail(nx, ny, x, y);
+                visited[x][y] = true;
+                moveBodyAndTail(nx, ny);
             }
         }
     }
@@ -103,7 +107,7 @@ public class Main {
             
         } else if (round <= 2 * n) {
             row = n - 1;
-            col = (n + 1) % round;
+            col = round % (n + 1);
             dir = 0;
 
         } else if (round <= 3 * n) {
